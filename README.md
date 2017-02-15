@@ -5,3 +5,4 @@ simple web app for to-do list
 2. jika menggunakan firefox dan safari browser, tanggal diinput dengan YYYY-MM-DD misal 2016-12-31
 3. data disimpan pada local storage
 4. edit file dengan double-click
+5. harus menggunakan internet karena ada js/ css yang depend dari internet
