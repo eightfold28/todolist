@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html ng-app="todoApp">
+<head>
+	<title>todolist.com - Main page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css"/>
+	<link rel="stylesheet" type="text/css" href="assets/css/todolist.css"/>
+	<link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+
+</head>
+<body ng-controller="todoController">
+	<nav class="navbar navbar-fixed-top navbar-default nav-todo pd-b-10 pd-t-10">
+		<div class="container">
+			<div class="text-center text-white">
+				<h1>To-Do List App</h1>
+			</div>
+		</div>
+	</nav>
+
+	<div class="banner">
+		<div class="container">
+			<div class="banner-text	text-center">
+				<h2> Your easy peasy to-do list </h2>
+				<p> Let's discover our amazing to-do application. What do you want to do?</p>
+				<button type="button" class="btn btn-default btn-lg text-white" data-toggle="modal" data-target="#myModal">
+					Add Todo
+				</button>
+				<!-- Modal add to-do-->
+				<div class="modal fade" id="myModal" role="dialog" style="z-index: 1400;">
+					<div class="modal-dialog">
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<div class="modal-title text-black"><h4>Add To-Do List</h4></div>
+							</div>
+							<div class="modal-body text-black">
+								<form class="form-horizontal">
+									<div class="form-group">
+										<label class="control-label col-sm-3 col-sm-offset-1 pd-t-0" for="title"><h4>Title</h4></label>
+										<div class="col-sm-6 pd-t-10">
+											<input type="text" class="form-control pd-t-10" id="title" placeholder="Enter your todo's title" ng-model="newTitle" required>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-3 col-sm-offset-1 pd-t-0" for="address"><h4>Description</h4></label>
+										<div class="col-sm-6 pd-t-10">
+											<textarea class="form-control" id ="description" rows="8" placeholder="Enter the description" ng-model="newDescription" name="address" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required></textarea>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-3 col-sm-offset-1" for="email"><h4>Start Date</h4></label>
+										<div class="col-sm-6 pd-t-10">
+											<input type="date" id="startDate" class="form-control" ng-model="newStartDate" required>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-3 col-sm-offset-1" for="phone"><h4>End Date</h4></label>
+										<div class="col-sm-6 pd-t-10">
+											<input type="date" id="endDate" class="form-control" ng-model="newEndDate" required></input>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="control-label col-sm-3 col-sm-offset-1" for="phone"><h4>Priority</h4></label>
+										<div class="col-sm-6 pd-t-10">
+											<label class="radio-inline">
+												<input type="radio" id="low" value="Low" name="priority" ng-model="newPriority" required>Low
+											</label>
+											<label class="radio-inline">
+												<input type="radio" id="medium" value="Medium" name="priority" ng-model="newPriority" required> Medium
+											</label>
+											<label class="radio-inline">
+												<input type="radio" id="high" value="High" name="priority" ng-model="newPriority" required>High
+											</label>
+										</div>
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default text-white" data-toggle="modal" href="#myModalSuccess" ng-click="addNew()" data-dismiss="modal">Add</button>
+								<button type="button" class="btn btn-default text-white" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- end of modal  -->
+				
+				<!-- Modal button add success message-->
+				<div class="modal fade" id="myModalSuccess" role="dialog" style="z-index: 1600;">
+					<div class="modal-dialog">
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<div class="modal-title text-black"><h4>Success</h4></div>
+							</div>
+							<div class="modal-body text-black">
+								Your to-do item is added!
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default text-white" data-dismiss="modal">OK!</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="background-white">
+			<div class="text-center pd-t-20 pd-b-40">
+				<h2>Your To-Do</h2>
+				<div class="group-shape">
+					<div id="element1">  <hr></div> 
+					<div id="element2">  <div class="diamond-small"></div> </div> 
+					<div id="element3">  <hr> </div> 
+				</div>
+			</div>
+
+			<div class="row pd-t-10 pd-b-20 mg-l-20 mg-r-20">
+				<ul class="todoList text-black">
+					<li class="todoItem mg-l-20" ng-repeat="todoItem in todoItem track by $index" ng-model="todoItem">
+						<input type="checkbox" class="todoCheckbox" ng-model="todoItem.complete" ng-change="save()">
+						<span class="complete-{{todoItem.complete}}" editable-text="todoItem.title">{{todoItem.title}}</span>
+						<br>
+						<strong class="complete-{{todoItem.complete}}" editable-text="todoItem.description">Description: {{todoItem.description}}</strong>
+						<br>
+						<strong class="todoDate complete-{{todoItem.complete}}" editable-text="todoItem.startDate"><i class="fa fa-calendar"></i>&nbsp;Start Date: {{todoItem.startDate | date : 'mediumDate'}}</strong>
+						<br>
+						<strong class="todoDate complete-{{todoItem.complete}}" editable-text="todoItem.endDate"><i class="fa fa-calendar"></i>&nbsp;End Date: {{todoItem.endDate | date : 'mediumDate'}}</strong>
+						<br>
+						<strong class="complete-{{todoItem.complete}}" editable-text="todoItem.priority">Priority: {{todoItem.priority}}</strong>  
+						<br>
+					</li>
+				</ul>
+			</div>
+
+			<div class="row pd-t-10 pd-b-20 text-center">
+				<button type="button" class="btn btn-default btn-lg text-white" ng-click="deleteTodo()">Delete Todo</button>
+			</div>
+		</div>
+	</div>
+
+
+
+	<!-- Bootstrap core JavaScript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+	<script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+
+	<script>
+		//Define angular app
+		var app = angular.module('todoApp', ["xeditable"]); 
+
+		//editable
+		app.run(function(editableOptions) {
+		editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+	});
+
+	//controllers
+	app.controller('todoController', function($scope) {
+		$scope.today = new Date();
+		$scope.saved = localStorage.getItem('todoItems');
+		$scope.todoItem = (localStorage.getItem('todoItems')!==null) ? 
+		JSON.parse($scope.saved) : [ {title: "Your to-do", description: "The description of your added to-do list", startDate: $scope.today, endDate: $scope.today, priority: "High", complete: false}];
+		localStorage.setItem('todoItems', JSON.stringify($scope.todoItem));
+
+		$scope.newTitle= null;
+		$scope.newDescription=null;
+		$scope.newStartDate= null;
+		$scope.newEndDate= null;
+		$scope.newPriority= null;
+
+		$scope.addNew = function () {
+			if ($scope.newEndDate == null || $scope.newEndDate == '') {
+				$scope.todoItem.push({
+					title: $scope.newTitle,
+					description: $scope.newDescription,
+					startDate: $scope.newStartDate,
+					endDate: "No deadline",
+					complete: false,
+					priority: $scope.newPriority
+				})
+			} else {
+				$scope.todoItem.push({
+					title: $scope.newTitle,
+					description: $scope.newDescription,
+					startDate: $scope.newStartDate,
+					endDate: $scope.newEndDate,
+					complete: false,
+					priority: $scope.newPriority
+				})
+			};
+			$scope.newTitle = '';
+			$scope.newDescription='';
+			$scope.newStartDate= '';
+			$scope.newEndDate= '';
+			$scope.newPriority= '';
+			localStorage.setItem('todoItems', JSON.stringify($scope.todoItem));
+		};
+
+		$scope.deleteTodo = function () {
+			var complete = $scope.todoItem;
+			$scope.todoItem = [];
+			angular.forEach(complete, function (todoItem) {
+				if (!todoItem.complete) {
+					$scope.todoItem.push(todoItem);
+				}
+			});
+			localStorage.setItem('todoItems', JSON.stringify($scope.todoItem));
+		};
+
+		$scope.save = function () {
+			localStorage.setItem('todoItems', JSON.stringify($scope.todoItem));
+		}
+	});
+</script>
+
+
+<script src="assets/js/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
